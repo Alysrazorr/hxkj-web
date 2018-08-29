@@ -3,6 +3,7 @@
     <nav class="top-nav">
       <div class="logo"></div>
       <div class="top-nav-avatar">
+        <span class="user-info">admin</span>
         <img class="avatar" src="../assets/avatar.jpg"/>
       </div>
       <ul class="top-nav-menu">
@@ -151,20 +152,32 @@ nav.top-nav {
   }
 
   &>div.top-nav-avatar {
-    width: 80px;
     height: 80px;
     line-height: 80px;
     align-items: center;
     float: right;
     margin-left: 20px;
+    cursor: pointer;
 
     &>img.avatar {
       width: 60px;
       height: 60px;
-      margin-top: 10px;
-      margin-left: 10px;
+      margin: 10px;
       border-radius: 9999px;
-      cursor: pointer;
+      float: right;
+    }
+
+    &>span.user-info {
+      height: 80px;
+      line-height: 80px;
+      font: {
+        size: 16px;
+        weight: 100;
+      }
+      float: right;
+      color: #fff;
+      margin-right: 10px;
+      user-select: none;
     }
   }
 }
