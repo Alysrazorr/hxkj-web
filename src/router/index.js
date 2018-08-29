@@ -4,6 +4,11 @@ import store from '@/store'
 
 import Login from '@/views/Login'
 import Root from '@/views/Root'
+import OperationAnalysis from '@/views/OperationAnalysis'
+import RentalCompany from '@/views/RentalCompany'
+import Renter from '@/views/Renter'
+import RenterUrge from '@/views/RenterUrge'
+import Config from '@/views/Config'
 
 Vue.use(Router)
 
@@ -18,7 +23,29 @@ const router = new Router({
       component: Root,
       meta: {
         auth: true
-      }
+      },
+      children: [
+        {
+          path: '/operationAnalysis',
+          component: OperationAnalysis
+        },
+        {
+          path: '/rentalCompany',
+          component: RentalCompany
+        },
+        {
+          path: '/renter',
+          component: Renter
+        },
+        {
+          path: '/renterUrge',
+          component: RenterUrge
+        },
+        {
+          path: '/config',
+          component: Config
+        }
+      ]
     },
     {
       path: '/login',
