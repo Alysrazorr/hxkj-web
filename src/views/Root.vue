@@ -127,6 +127,7 @@ nav.top-nav {
   height: 80px;
   line-height: 80px;
   background:linear-gradient(to bottom right,rgb(0,164,245),rgb(0,124,205));
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
 
   &>ul.top-nav-menu {
     list-style: none;
@@ -156,7 +157,10 @@ nav.top-nav {
           display: block;
           height: 25px;
           line-height: 25px;
-          font-size: 14px;
+          font: {
+            size: 14px;
+            weight: 600;
+          }
         }
 
         &:hover,
