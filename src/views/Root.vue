@@ -2,10 +2,6 @@
   <div class="root">
     <nav class="top-nav">
       <div class="logo"></div>
-      <div class="top-nav-avatar">
-        <span class="user-info">admin</span>
-        <img class="avatar" src="../assets/avatar.jpg"/>
-      </div>
       <ul class="top-nav-menu">
         <li v-for="menu in menus" :key="menu.router">
           <div @click="go(menu.router)"
@@ -15,6 +11,32 @@
           </div>
         </li>
       </ul>
+      <div class="top-nav-user-info">
+        <el-popover
+          placement="bottom"
+          width="250"
+          trigger="click">
+          <div class="user-info-panel">
+            <div class="user-info">
+              <img class="user-avatar" src="../assets/avatar.jpg"/>
+              <div class="user-detail">
+                <p class="user-detail-account">admin</p>
+                <p class="user-detail-roles">系统管理员，数据管理猿</p>
+                <p class="user-detail-email">nsgxpt@foxmail.com.cn</p>
+              </div>
+            </div>
+            <div class="button-panel">
+              <el-button
+                type="button"
+                size="mini"
+                @click="logout">
+                <i class="fas fa-sign-out-alt"></i>&nbsp;退出
+              </el-button>
+            </div>
+          </div>
+          <span slot="reference"><i class="fas fa-user-circle"></i></span>
+        </el-popover>
+      </div>
     </nav>
     <div class="container">
       <transition name="slide-fade">
@@ -29,38 +51,32 @@ export default {
   data () {
     return {
       currRouter: '',
-      menus: [
-        {
-          router: 'operationAnalysis',
-          icon: 'fas fa-chart-line',
-          iconFontSize: '30px',
-          title: '运营分析'
-        },
-        {
-          router: 'rentalCompany',
-          icon: 'fas fa-tasks',
-          iconFontSize: '24px',
-          title: '租赁公司信息管理'
-        },
-        {
-          router: 'renter',
-          icon: 'fas fa-people-carry',
-          iconFontSize: '22px',
-          title: '承租人管理'
-        },
-        {
-          router: 'renterUrge',
-          icon: 'fas fa-phone',
-          iconFontSize: '22px',
-          title: '承租人催收管理'
-        },
-        {
-          router: 'config',
-          icon: 'fas fa-cogs',
-          iconFontSize: '22px',
-          title: '系统管理'
-        }
-      ]
+      menus: [{
+        router: 'operationAnalysis',
+        icon: 'fas fa-chart-line',
+        iconFontSize: '30px',
+        title: '运营分析'
+      }, {
+        router: 'rentalCompany',
+        icon: 'fas fa-tasks',
+        iconFontSize: '24px',
+        title: '租赁公司信息管理'
+      }, {
+        router: 'renter',
+        icon: 'fas fa-people-carry',
+        iconFontSize: '22px',
+        title: '承租人管理'
+      }, {
+        router: 'renterUrge',
+        icon: 'fas fa-phone',
+        iconFontSize: '22px',
+        title: '承租人催收管理'
+      }, {
+        router: 'config',
+        icon: 'fas fa-cogs',
+        iconFontSize: '22px',
+        title: '系统管理'
+      }]
     }
   },
   methods: {
@@ -70,6 +86,15 @@ export default {
     go (router) {
       this.currRouter = router
       this.$router.push(router)
+    },
+    logout () {
+      let thiz = this
+      thiz.$axios.get('/security/logout').then(() => {
+        window.sessionStorage.clear()
+        thiz.$store.commit('clearAll')
+        thiz.$store.commit('home/clearAll')
+        thiz.$router.push('/login')
+      })
     }
   },
   mounted () {
@@ -79,16 +104,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to {
-  transform: translateX(10px);
-  opacity: 0;
-}
+@import '@/assets/main.scss';
 
 div.root {
   position: absolute;
@@ -110,7 +126,7 @@ div.container {
 nav.top-nav {
   height: 80px;
   line-height: 80px;
-  background-color: rgb(0,164,245);
+  background:linear-gradient(to bottom right,rgb(0,164,245),rgb(0,124,205));
 
   &>ul.top-nav-menu {
     list-style: none;
@@ -122,7 +138,7 @@ nav.top-nav {
       float: left;
 
       &>div {
-        height: 70px;
+        height: 80px;
         padding-top: 10px;
         padding-left: 20px;
         padding-right: 20px;
@@ -151,33 +167,55 @@ nav.top-nav {
     }
   }
 
-  &>div.top-nav-avatar {
+  &>.top-nav-user-info {
     height: 80px;
     line-height: 80px;
-    align-items: center;
     float: right;
-    margin-left: 20px;
-    cursor: pointer;
 
-    &>img.avatar {
-      width: 60px;
-      height: 60px;
-      margin: 10px;
-      border-radius: 9999px;
-      float: right;
+    &>* {
+      user-select: none;
     }
 
-    &>span.user-info {
+    &>img {
+      float: left;
+      margin-top: 5px;
+    }
+
+    &>a {
+      float: left;
+      font: {
+        size: 26px;
+        family: 'simhei';
+        weight: 100;
+      };
+      color: white;
+      margin-left: 5px;
+
+      &.title {
+        cursor: pointer;
+        text-shadow: 0 0 4px rgba(16, 37, 160, 0.9);
+      }
+
+      &.current-page {
+        margin-left: 0;
+
+        font: {
+          size: 14px;
+          family: 'Microsoft Yahei';
+          weight: 100;
+        };
+      }
+    }
+
+    i {
+      display: inline-block;
+      width: 80px;
       height: 80px;
       line-height: 80px;
-      font: {
-        size: 16px;
-        weight: 100;
-      }
-      float: right;
+      font-size: 32px;
       color: #fff;
-      margin-right: 10px;
-      user-select: none;
+      text-align: center;
+      cursor: pointer;
     }
   }
 }
@@ -191,5 +229,59 @@ div.logo {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 70%;
+}
+</style>
+
+<style lang="scss">
+$user-info-panel-width: 250px;
+$user-avatar-size: 80px;
+$user-detail-width: $user-info-panel-width - $user-avatar-size;
+
+.user-info-panel {
+  width: 250px;
+  height: 150px;
+
+  &>.user-info {
+    height: 110px;
+    padding: 15px 0;
+
+    &>.user-avatar {
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      float: left;
+      border-radius: 9999px;
+    }
+    &>.user-detail {
+      float: left;
+      width: $user-detail-width;
+      padding-left: 10px;
+
+      &>p {
+        line-height: 1.6em;
+        font-weight: 100;
+        font-size: 13px;
+      }
+      &>.user-detail-account {
+        font-size: 20px;
+        font-weight: 600;
+      }
+      &>.user-detail-roles {
+        color: #555;
+      }
+      &>.user-detail-email {
+        font-family: 'Conaolas';
+        color: #555;
+      }
+    }
+  }
+
+  &>.button-panel {
+    height: 40px;
+    line-height: 40px;
+    border-top: 1px solid #ebeef5;
+    text-align: right;
+    font-size: 13px !important;
+  }
 }
 </style>
