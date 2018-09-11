@@ -212,7 +212,7 @@ nav.top-nav {
       width: 80px;
       height: 80px;
       line-height: 80px;
-      font-size: 32px;
+      font-size: 44px;
       color: #fff;
       text-align: center;
       cursor: pointer;
@@ -281,7 +281,10 @@ $user-detail-width: $user-info-panel-width - $user-avatar-size;
     line-height: 40px;
     border-top: 1px solid #ebeef5;
     text-align: right;
-    font-size: 13px !important;
+
+    * {
+      font-size: 13px !important;
+    }
   }
 }
 </style>
