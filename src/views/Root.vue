@@ -212,7 +212,7 @@ nav.top-nav {
       width: 80px;
       height: 80px;
       line-height: 80px;
-      font-size: 44px;
+      font-size: 40px;
       color: #fff;
       text-align: center;
       cursor: pointer;
