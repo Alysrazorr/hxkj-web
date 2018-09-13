@@ -72,10 +72,15 @@ export default {
         iconFontSize: '22px',
         title: '承租人催收管理'
       }, {
-        router: 'config',
-        icon: 'fas fa-cogs',
-        iconFontSize: '22px',
-        title: '系统管理'
+        router: 'user',
+        icon: 'fas fa-user',
+        iconFontSize: '24px',
+        title: '用户管理'
+      }, {
+        router: 'organization',
+        icon: 'fas fa-sitemap',
+        iconFontSize: '24px',
+        title: '部门管理'
       }]
     }
   },
@@ -91,8 +96,7 @@ export default {
       let thiz = this
       thiz.$axios.get('/security/logout').then(() => {
         window.sessionStorage.clear()
-        thiz.$store.commit('clearAll')
-        thiz.$store.commit('home/clearAll')
+        thiz.$store.commit('clearToken')
         thiz.$router.push('/login')
       })
     }

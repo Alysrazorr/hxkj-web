@@ -32,44 +32,41 @@
     </el-row>
     <el-card
       shadow="hover"
-      class="card-renterUrge"
-      v-for="renterUrge in renterUrges" :key="renterUrge.id">
+      class="card-organization"
+      v-for="organization in organizations" :key="organization.id">
       <div slot="header" class="clearfix card-chart-header">
-        <span class="renterUrge-title">承租人XX001</span>
+        <span class="organization-title"><b style="font-weight: bold">部门名称</b></span>
       </div>
       <el-row :gutter="20">
         <el-col :span="5">
-          <img class="renterUrge-img"/>
+          <img class="organization-img"/>
         </el-col>
         <el-col :span="15">
-          <el-row>
-            <span class="renterUrge-info"><b style="font-weight: bold">承租人编号: 承租人XX001</b></span>
-          </el-row>
           <el-row :gutter="20">
-            <el-col :span="8">
-              <span class="renterUrge-info">委托日期:</span></el-col>
-            <el-col :span="8">
-              <span class="renterUrge-info">时点逾期天数:</span>
+            <el-col :span="10">
+              <span class="organization-info">名称: XXXX</span>
             </el-col>
             <el-col :span="8">
-              <span>逾期金额:</span>
+              <span class="organization-info">别名: xx</span>
             </el-col>
           </el-row>
           <el-row :gutter="20">
-            <el-col :span="8">
-              <span class="renterUrge-info">五级分类:</span>
+            <el-col :span="10">
+              <span class="organization-info">部门编号:</span>
             </el-col>
-            <el-col :span="8">
-              <span class="renterUrge-info">催收记录:</span>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="18">
+              <span class="organization-info">备注:</span>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="4">
-          <el-row><span class="renterUrge-info"></span></el-row>
-          <el-row><span class="renterUrge-info"></span></el-row>
-          <el-row><span class="renterUrge-info"></span></el-row>
+          <el-row><span class="organization-info"></span></el-row>
+          <el-row><span class="organization-info"></span></el-row>
+          <el-row><span class="organization-info"></span></el-row>
           <el-row type="fix" justify="end">
-            <el-button type="warning" icon="el-icon-edit" @click="editForm.visible = true">修改</el-button>
+            <el-button type="warning" icon="el-icon-edit" @click="showEditForm">修改信息</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -77,27 +74,21 @@
     <!-- 新增 -->
     <el-dialog
       width="30%"
-      title="承租人催收-新增"
+      title="部门-新增"
       :visible.sync="addForm.visible"
       :close-on-click-modal="false"
       :modal-append-to-body="false">
        <el-form :model="addForm.data" :rules="addForm.rules" ref="addForm" label-width="130px">
-        <el-form-item label="承租人编号：" prop="pName">
+        <el-form-item label="名称：" prop="pName">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="委托日期：" prop="pName">
+        <el-form-item label="别名:" prop="pName">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="时点逾期天数：" prop="pName">
+        <el-form-item label="部门编号：" prop="pName">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="逾期金额：" prop="pName">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="五级分类：" prop="pRemark">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="催收记录：" prop="pRemark">
+        <el-form-item label="备注：" prop="pRemark">
           <el-input type="textarea" ></el-input>
         </el-form-item>
       </el-form>
@@ -105,30 +96,24 @@
         <el-button type="primary" @click="submitAddForm()">提交</el-button>
       </span>
     </el-dialog>
-    <!-- 编辑-修改 -->
+    <!-- 编辑=修改 -->
     <el-dialog
       width="30%"
-      title="承租人催收-修改"
+      title="部门-修改"
       :visible.sync="editForm.visible"
       :close-on-click-modal="false"
       :modal-append-to-body="false">
        <el-form :model="editForm.data" ref="editForm" label-width="130px">
-        <el-form-item label="承租人编号：" prop="pName">
+        <el-form-item label="名称：" prop="pName">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="委托日期：" prop="pName">
+        <el-form-item label="别名:" prop="pName">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="时点逾期天数：" prop="pName">
+        <el-form-item label="部门编号：" prop="pName">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="逾期金额：" prop="pName">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="五级分类：" prop="pRemark">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="催收记录：" prop="pRemark">
+        <el-form-item label="备注：" prop="pRemark">
           <el-input type="textarea" ></el-input>
         </el-form-item>
       </el-form>
@@ -143,16 +128,14 @@
 export default {
   data () {
     let rules = {
-      pName: [{required: true, message: '请输入名称'}, {max: 50, message: '长度不超过50个字符'}],
-      pRemark: [{max: 4000, message: '长度不超过4000个字符'}]
+      pName: [{required: true, message: '请输入名称'}, {max: 50, message: '长度不超过50个字符'}]
     }
     return {
       formInline: {
-        user: '',
+        organization: '',
         region: '',
         keyword: ''
       },
-      renterUrges: [{id: '1'}, {id: '2'}, {id: '3'}],
       addForm: {
         visible: false,
         data: {
@@ -163,11 +146,15 @@ export default {
         visible: false,
         data: {
         }
-      }
+      },
+      organizations: [{id: '1'}, {id: '2'}, {id: '3'}]
     }
   },
   methods: {
-    submitAddForm () {}
+    showEditForm () {
+      let thiz = this
+      thiz.editForm.visible = true
+    }
   }
 }
 </script>
@@ -180,8 +167,13 @@ div.root {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.card-renterUrge {
+.card-organization {
+  width: calc((100% - 24px) * .5);
+  display: inline-block;
   margin-bottom: 20px;
+  &:nth-child(even) {
+    margin-right: 20px;
+  }
   .card-chart-header > span {
     user-select: none;
     font: {
@@ -195,14 +187,14 @@ div.root {
   }
 }
 
-img.renterUrge-img {
+img.organization-img {
   width: 100%;
-  height: 210px;
+  height: 160px;
 }
 
-span.renterUrge-info {
+span.organization-info {
   display: inline-block;
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
 }
 </style>

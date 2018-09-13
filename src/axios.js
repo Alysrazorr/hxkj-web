@@ -16,7 +16,7 @@ axios.interceptors.response.use(
   err => {
     if (err.response) {
       switch (err.response.status) {
-        case 490:
+        case 442:
           store.commit('clearToken')
           router.replace({
             path: '/login',
