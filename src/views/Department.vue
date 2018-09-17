@@ -10,7 +10,7 @@
               style="width: 400px;"/>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
           </el-form-item>
         </el-col>
         <el-col :span="8">

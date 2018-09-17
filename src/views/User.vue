@@ -1,30 +1,24 @@
 <template>
   <div class="root">
     <el-row>
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" class="demo-form-inline">
         <el-col :span="16">
-          <el-form-item style="width: 120px;">
-            <el-select v-model="formInline.region" placeholder="项目类型">
-              <el-option label="全委" value="qw"></el-option>
-              <el-option label="半委" value="bw"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item>
             <el-input
               placeholder="关键字"
-              v-model="formInline.keyword"
+              v-model="keyword"
               style="width: 400px;"/>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-row type="flex" justify="end">
             <el-form-item>
               <el-button type="primary" icon="el-icon-plus" @click="addForm.visible = true">新增</el-button>
-              <el-button type="danger" icon="el-icon-delete">删除</el-button>
-              <el-button type="success" icon="el-icon-download">导出</el-button>
+              <!-- <el-button type="danger" icon="el-icon-delete">删除</el-button> -->
+              <!-- <el-button type="success" icon="el-icon-download">导出</el-button> -->
             </el-form-item>
           </el-row>
         </el-col>
@@ -80,41 +74,42 @@
       :visible.sync="addForm.visible"
       :close-on-click-modal="false"
       :modal-append-to-body="false">
-       <el-form :model="addForm.data" :rules="addForm.rules" ref="addForm" label-width="130px">
-         <el-row>
-           <el-col :span="14">
-             <el-form-item label="昵称：" prop="nickname">
-              <el-input></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item label="头像：" style="margin-bottom: 10px">
-              <el-upload
-                class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
-                <img v-if="addForm.imageUrl" :src="addForm.imageUrl" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
-            </el-form-item>
-          </el-col>
-         </el-row>
+      <el-form :model="addForm.data" :rules="addForm.rules" ref="addForm" label-width="130px">
+        <el-row type="flex" justify="center" :style="'margin-bottom: 20px;'">
+          <el-upload
+            class="avatar-uploader"
+            action
+            :show-file-list="false"
+            :http-request="handleUpload">
+            <img v-if="addForm.imageUrl" :src="addForm.imageUrl" class="avatar">
+            <i v-else class="el-icon-upload avatar-uploader-icon"></i>
+            <div>上传头像</div>
+          </el-upload>
+        </el-row>
+        <el-form-item label="昵称：" prop="nickname">
+          <el-input v-model="addForm.data.nickname"></el-input>
+        </el-form-item>
         <el-form-item label="用户名：" prop="username">
-          <el-input></el-input>
+          <el-input v-model="addForm.data.username"></el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
-          <el-input></el-input>
+          <el-input v-model="addForm.data.password"></el-input>
         </el-form-item>
         <el-form-item label="电子邮箱：" prop="email">
-          <el-input></el-input>
+          <el-input v-model="addForm.data.email"></el-input>
         </el-form-item>
         <el-form-item label="所属部门：" prop="department">
-          <el-input></el-input>
+          <el-select v-model="addForm.data.department" clearable placeholder="请选择">
+            <el-option
+              v-for="item in departments"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="备注：" prop="pRemark">
-          <el-input type="textarea" ></el-input>
+        <el-form-item label="备注：" prop="remark">
+          <el-input type="textarea" v-model="addForm.data.remark"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -136,17 +131,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="用户头像：" style="margin-bottom: 10px">
-              <el-upload
-                class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
-                <img v-if="editForm.imageUrl" :src="editForm.imageUrl" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
-            </el-form-item>
+
           </el-col>
          </el-row>
         <el-form-item label="账号:" prop="pName">
@@ -176,42 +161,147 @@
 export default {
   data () {
     let rules = {
-      pName: [{required: true, message: '请输入名称'}, {max: 50, message: '长度不超过50个字符'}]
+      nickname: [{required: true, message: '请输入名称'}, {max: 50, message: '长度不超过50个字符'}]
     }
     return {
-      formInline: {
-        user: '',
-        region: '',
-        keyword: ''
-      },
+      keyword: '',
       addForm: {
         visible: false,
         imageUrl: '',
-        data: {},
+        data: {
+          nickname: '',
+          username: '',
+          password: '',
+          email: '',
+          department: '',
+          remark: ''
+        },
         rules: rules
       },
       editForm: {
         visible: false,
         imageUrl: '',
-        data: {}
+        data: {
+          nickname: '',
+          username: '',
+          password: '',
+          email: '',
+          department: '',
+          remark: ''
+        }
       },
+      departments: [],
       users: [{id: '1'}, {id: '2'}, {id: '3'}]
     }
   },
+  mounted () {
+    let thiz = this
+    thiz.$nextTick(() => {
+      thiz.$axios.get('/department').then(({data}) => {
+        console.log(data)
+        for (let dept of data.data) {
+          console.log(dept)
+          thiz.departments.push({
+            label: dept.domainName,
+            value: dept.domainId
+          })
+        }
+      })
+    })
+  },
   methods: {
-    handleAvatarSuccess (res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+    search () {
+      let thiz = this
+      thiz.$axios.get(`/user`).then(({data}) => {
+        thiz.users = data.data
+      })
     },
-    beforeAvatarUpload (file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
+    submitAddForm () {
+      let thiz = this
+      thiz.$refs['addForm'].validate((valid) => {
+        if (valid) {
+          thiz.$axios.put(`/user`, thiz.addForm.data).then((result) => {
+            if (result.data.statusCode === 233) {
+              thiz.$message({
+                message: '新增成功',
+                type: 'success'
+              })
+              thiz.search()
+              thiz.addForm.visible = false
+              thiz.$refs['addForm'].resetFields()
+            } else {
+              thiz.$message({
+                message: '新增失败',
+                type: 'error'
+              })
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    submitEditForm () {
+      let thiz = this
+      thiz.$refs['editForm'].validate((valid) => {
+        if (valid) {
+          thiz.$axios.post(`/department`, thiz.editForm.data).then((result) => {
+            if (result.data.statusCode === 233) {
+              thiz.$message({
+                message: '编辑成功',
+                type: 'success'
+              })
+              thiz.search()
+              thiz.editForm.visible = false
+              thiz.$refs['editForm'].resetFields()
+            } else {
+              thiz.$message({
+                message: '编辑失败',
+                type: 'error'
+              })
+            }
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    handleUpload (param) {
+      let thiz = this
+      let formData = new FormData()
+      formData.append('files', param.file)
+      const isJPG = param.file.type === 'image/jpeg'
+      const isLt2M = param.file.size / 1024 < 512
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!')
+        return
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error('上传头像图片大小不能超过 512KB!')
+        return
       }
-      return isJPG && isLt2M
+      let loading = thiz.$loading({
+        lock: true,
+        text: '上传中，请稍候...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      thiz.$axios.post('/attachment', formData).then(({data}) => {
+        if (data.statusCode === 233) {
+          thiz.$message({
+            message: '上传成功',
+            type: 'success'
+          })
+          thiz.addForm.imageUrl = URL.createObjectURL(param.file)
+          thiz.addForm.data.avatar = data.data
+        } else {
+          thiz.$message({
+            message: '上传失败',
+            type: 'danger'
+          })
+        }
+        loading.close()
+      })
     }
   }
 }
@@ -220,10 +310,12 @@ export default {
 <style>
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
-  border-radius: 6px;
+  border-radius: 9999px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  width: 350px;
+  height: 350px;
 }
 .avatar-uploader .el-upload:hover {
   border-color: #409EFF;
@@ -235,11 +327,13 @@ export default {
   height: 100px;
   line-height: 100px;
   text-align: center;
+  margin-top: 125px;
 }
 .avatar {
-  width: 100px;
-  height: 100px;
+  width: 350px;
+  height: 350px;
   display: block;
+  image-orientation: flip;
 }
 </style>
 
