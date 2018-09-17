@@ -32,39 +32,39 @@
     </el-row>
     <el-card
       shadow="hover"
-      class="card-organization"
-      v-for="organization in organizations" :key="organization.id">
+      class="card-department"
+      v-for="department in departments" :key="department.id">
       <div slot="header" class="clearfix card-chart-header">
-        <span class="organization-title"><b style="font-weight: bold">部门名称</b></span>
+        <span class="department-title"><b style="font-weight: bold">部门名称</b></span>
       </div>
       <el-row :gutter="20">
         <el-col :span="5">
-          <img class="organization-img"/>
+          <img class="department-img"/>
         </el-col>
         <el-col :span="15">
           <el-row :gutter="20">
             <el-col :span="10">
-              <span class="organization-info">名称: XXXX</span>
+              <span class="department-info">名称: XXXX</span>
             </el-col>
             <el-col :span="8">
-              <span class="organization-info">别名: xx</span>
+              <span class="department-info">别名: xx</span>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="10">
-              <span class="organization-info">部门编号:</span>
+              <span class="department-info">部门编号:</span>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="18">
-              <span class="organization-info">备注:</span>
+              <span class="department-info">备注:</span>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="4">
-          <el-row><span class="organization-info"></span></el-row>
-          <el-row><span class="organization-info"></span></el-row>
-          <el-row><span class="organization-info"></span></el-row>
+          <el-row><span class="department-info"></span></el-row>
+          <el-row><span class="department-info"></span></el-row>
+          <el-row><span class="department-info"></span></el-row>
           <el-row type="fix" justify="end">
             <el-button type="warning" icon="el-icon-edit" @click="showEditForm">修改信息</el-button>
           </el-row>
@@ -132,7 +132,7 @@ export default {
     }
     return {
       formInline: {
-        organization: '',
+        department: '',
         region: '',
         keyword: ''
       },
@@ -147,7 +147,7 @@ export default {
         data: {
         }
       },
-      organizations: [{id: '1'}, {id: '2'}, {id: '3'}]
+      departments: [{id: '1'}, {id: '2'}, {id: '3'}]
     }
   },
   methods: {
@@ -167,7 +167,7 @@ div.root {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.card-organization {
+.card-department {
   width: calc((100% - 24px) * .5);
   display: inline-block;
   margin-bottom: 20px;
@@ -187,12 +187,12 @@ div.root {
   }
 }
 
-img.organization-img {
+img.department-img {
   width: 100%;
   height: 160px;
 }
 
-span.organization-info {
+span.department-info {
   display: inline-block;
   height: 40px;
   line-height: 40px;

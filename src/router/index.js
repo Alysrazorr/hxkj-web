@@ -9,7 +9,7 @@ import RentalCompany from '@/views/RentalCompany'
 import Renter from '@/views/Renter'
 import RenterUrge from '@/views/RenterUrge'
 import User from '@/views/User'
-import Organization from '@/views/Organization'
+import Department from '@/views/Department'
 
 Vue.use(Router)
 
@@ -62,8 +62,8 @@ const router = new Router({
           }
         },
         {
-          path: '/organization',
-          component: Organization,
+          path: '/department',
+          component: Department,
           meta: {
             auth: true
           }

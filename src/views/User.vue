@@ -22,8 +22,8 @@
         <el-col :span="8">
           <el-row type="flex" justify="end">
             <el-form-item>
-              <el-button type="primary" icon="el-icon-plus" @click="addForm.visible = true">新增用户</el-button>
-              <el-button type="danger" icon="el-icon-delete">删除用户</el-button>
+              <el-button type="primary" icon="el-icon-plus" @click="addForm.visible = true">新增</el-button>
+              <el-button type="danger" icon="el-icon-delete">删除</el-button>
               <el-button type="success" icon="el-icon-download">导出</el-button>
             </el-form-item>
           </el-row>
@@ -83,12 +83,12 @@
        <el-form :model="addForm.data" :rules="addForm.rules" ref="addForm" label-width="130px">
          <el-row>
            <el-col :span="14">
-             <el-form-item label="用户名：" prop="pName">
+             <el-form-item label="昵称：" prop="nickname">
               <el-input></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="用户头像：" style="margin-bottom: 10px">
+            <el-form-item label="头像：" style="margin-bottom: 10px">
               <el-upload
                 class="avatar-uploader"
                 action="https://jsonplaceholder.typicode.com/posts/"
@@ -101,16 +101,16 @@
             </el-form-item>
           </el-col>
          </el-row>
-        <el-form-item label="账号:" prop="pName">
+        <el-form-item label="用户名：" prop="username">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="密码：" prop="pName">
+        <el-form-item label="密码：" prop="password">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="电子邮箱：" prop="pName">
+        <el-form-item label="电子邮箱：" prop="email">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="所属部门：" prop="pName">
+        <el-form-item label="所属部门：" prop="department">
           <el-input></el-input>
         </el-form-item>
         <el-form-item label="备注：" prop="pRemark">

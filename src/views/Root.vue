@@ -77,7 +77,7 @@ export default {
         iconFontSize: '24px',
         title: '用户管理'
       }, {
-        router: 'organization',
+        router: 'department',
         icon: 'fas fa-sitemap',
         iconFontSize: '24px',
         title: '部门管理'
